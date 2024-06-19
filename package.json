@@ -1,0 +1,20 @@
+{
+  "name": "chili-webscraper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "tsc && node dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.14.6",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "puppeteer": "^22.11.2"
+  }
+}
