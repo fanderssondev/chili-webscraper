@@ -1,19 +1,42 @@
 import puppeteer from 'puppeteer';
-import fs from 'fs';
+import fs from 'fs/promises';
 
-console.log(123);
+const baseURL = 'https://www.pepperworldhotshop.com/en/bbq-shop/fresh-chillies/';
 
 const scrape = async () => {
+   console.log('scraping...');
+   const data = await readData('./links.json');
+
+   const URL = data[0];
+
    const browser = await puppeteer.launch();
-   // const page = await browser.newPage();
+   const page = await browser.newPage();
 
-   // await page.goto('https://www.pepperworldhotshop.com/en/bbq-shop/fresh-chillies/');
+   await page.goto(baseURL);
 
-   // const res = await page.evaluate('div.picture a');
+   const res = await page.$$eval('div.picture a', (links) => links.map((link) => {
+      return {
+         link: link.href,
+         img: document.querySelector<HTMLImageElement>('img')?.src || '',
+      };
+   }));
 
-   // console.log(res);
+   console.log(res);
 
-   // await browser.close();
+   // fs.writeFileSync(filePath, JSON.stringify(res));
+
+   await browser.close();
+};
+
+const readData = async (path: string): Promise<string[]> => {
+   try {
+      const data = await fs.readFile(path, { encoding: 'utf8' });
+      return JSON.parse(data);
+   } catch (error) {
+      console.error(error);
+      throw new Error('Error reading file');
+   }
 };
 
 scrape();
+// readData('./links.json');
