@@ -12,12 +12,16 @@ const scrape = async () => {
    const browser = await puppeteer.launch();
    const page = await browser.newPage();
 
-   await page.goto(baseURL);
+   await page.goto(baseURL, { waitUntil: 'domcontentloaded' });
 
-   const res = await page.$$eval('div.picture a', (links) => links.map((link) => {
+
+
+
+
+   const res = await page.$$eval('div.picture a', (elements) => elements.map((e) => {
       return {
-         link: link.href,
-         img: document.querySelector<HTMLImageElement>('img')?.src || '',
+         link: e.href,
+         img: e.querySelector<HTMLImageElement>('img')?.src || '',
       };
    }));
 
